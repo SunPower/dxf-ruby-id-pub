@@ -147,7 +147,16 @@ module DXF
 
     # Return the individual line segments
     def lines
-      points.each_cons(2).map { |a, b| Line.new a, b }
+      points.each_cons(2).map do |a, b|
+        line = Line.new a,b
+        line.layer = self.layer
+        line.color_number = self.color_number
+        line.x1 = a[0]
+        line.y1 = a[1]
+        line.x2 = b[0]
+        line.y2 = b[1]
+        line
+      end
     end
   end
 
