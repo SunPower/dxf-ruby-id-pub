@@ -161,10 +161,10 @@ module DXF
   end
 
   class Polyline < LWPolyline
-		def initialize(*points)
-			@points = points.drop(1).map {|a| Point[a]}
-		end
-	end
+    def initialize(*points)
+      @points = points.drop(1).map {|a| Point[a]}
+    end
+  end
 
   class Spline < Entity
     attr_reader :degree

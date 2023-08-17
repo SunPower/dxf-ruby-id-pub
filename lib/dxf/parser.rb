@@ -101,10 +101,10 @@ module DXF
             parser = nil
           end
 
-					next if ['ENDSEC', 'VERTEX','SEQEND'].include?(value)
+          next if ['ENDSEC', 'VERTEX','SEQEND'].include?(value)
 
-					if ['LWPOLYLINE', 'POLYLINE'].include? value
-						parser = EntityParser.new(value)
+          if ['LWPOLYLINE', 'POLYLINE'].include? value
+            parser = EntityParser.new(value)
           elsif 'SPLINE' == value
             parser = SplineParser.new
           else
@@ -191,7 +191,7 @@ module DXF
 
     def to_entity
       case @type_name
-			  when 'POLYLINE' then 
+        when 'POLYLINE' then 
           Polyline.new(*points)
         when 'LWPOLYLINE' then
           LWPolyline.new(*points)
