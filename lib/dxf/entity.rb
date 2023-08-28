@@ -141,8 +141,9 @@ module DXF
     #   @return [Array<Point>]  The points that make up the polyline
     attr_reader :points
 
-    def initialize(*points)
+    def initialize(layer, *points)
       @points = points.map { |a| Point[a] }
+      @layer = layer
     end
 
     # Return the individual line segments
@@ -161,8 +162,9 @@ module DXF
   end
 
   class Polyline < LWPolyline
-    def initialize(*points)
+    def initialize(layer, *points)
       @points = points.drop(1).map {|a| Point[a]}
+      @layer = layer
     end
   end
 

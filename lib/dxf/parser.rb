@@ -192,9 +192,9 @@ module DXF
     def to_entity
       case @type_name
         when 'POLYLINE' then 
-          Polyline.new(*points)
+          Polyline.new(@layer, *points)
         when 'LWPOLYLINE' then
-          LWPolyline.new(*points)
+          LWPolyline.new(@layer, *points)
       end
     end
   end
