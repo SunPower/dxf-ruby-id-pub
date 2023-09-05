@@ -24,6 +24,12 @@ module DXF
         raise ParseError, "Expecting a SECTION, not #{value}" unless 'SECTION' == value
         parse_section(io)
       end
+      self.entities.map.with_index do |entity, i|
+        if (entity.respond_to?(:points))
+          self.entities[i] = entity.lines
+        end
+      end
+      self.entities = self.entities.flatten
       self
     end
 
@@ -90,15 +96,14 @@ module DXF
       parser = nil
       parse_pairs io do |code, value|
         if 0 == code.to_i
-          if parser
+          if parser && value != 'VERTEX'
             entities.push parser.to_entity
             parser = nil
           end
 
-          # Nothing to do
-          next if 'ENDSEC' == value
+          next if ['ENDSEC', 'VERTEX','SEQEND'].include?(value)
 
-          if 'LWPOLYLINE' == value
+          if ['LWPOLYLINE', 'POLYLINE'].include? value
             parser = EntityParser.new(value)
           elsif 'SPLINE' == value
             parser = SplineParser.new
@@ -186,8 +191,10 @@ module DXF
 
     def to_entity
       case @type_name
+        when 'POLYLINE' then 
+          Polyline.new(@layer, *points)
         when 'LWPOLYLINE' then
-          LWPolyline.new(*points)
+          LWPolyline.new(@layer, *points)
       end
     end
   end
